@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CookyLanda - Galletas Artesanales Premium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #5C2C0D;
+            --secondary: #F8EDE3;
+            --accent: #D4A373;
+            --light: #FAF6F0;
+            --dark: #2A1A0F;
+            --text: #333333;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            background-color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-top: 100px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header con Logo Grande */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            padding: 10px 0;
+        }
+
+        header.scrolled {
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            padding: 5px 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 80px;
+            width: auto;
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled .logo img {
+            height: 60px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+            position: relative;
+        }
+
+        nav ul li a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            padding: 8px 0;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            bottom: 0;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        /* Botones Mejorados */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(92, 44, 13, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--white);
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(212, 163, 115, 0.3);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* Botón de Login Especial */
+        .login-btn {
+            background-color: var(--accent);
+            color: var(--primary);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(212, 163, 115, 0.2);
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .login-btn:hover {
+            background-color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(212, 163, 115, 0.3);
+        }
+
+        .login-btn i {
+            margin-right: 8px;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Hero Section con Fondo */
+        .hero {
+            height: 100vh;
+            min-height: 700px;
+            background: 
+                linear-gradient(rgba(42, 26, 15, 0.7), rgba(42, 26, 15, 0.7)), 
+                url('{{ url_for("static", filename="css/img/img/cook.jpg") }}') center/cover no-repeat;
+              
+                
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin-top: -100px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--white);
+            line-height: 1.2;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Secciones */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--text);
+        }
+
+        /* Galletas */
+        .cookies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .cookie-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .cookie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .cookie-img {
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .cookie-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .cookie-card:hover .cookie-img img {
+            transform: scale(1.05);
+        }
+
+        .cookie-info {
+            padding: 25px;
+        }
+
+        .cookie-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .cookie-info p {
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .cookie-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* About Section */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-img {
+            flex: 1;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        /* Testimonios */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            position: relative;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .testimonial-text::before {
+            content: '"';
+            font-size: 3rem;
+            color: var(--accent);
+            opacity: 0.2;
+            position: absolute;
+            top: -15px;
+            left: -5px;
+            font-family: 'Playfair Display', serif;
+            line-height: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .author-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+            border: 3px solid var(--accent);
+        }
+
+        .author-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .author-info p {
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--white);
+            padding: 60px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo img {
+            height: 70px;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo p {
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-links h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--white);
+            opacity: 0.8;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--accent);
+            padding-left: 5px;
+        }
+
+        .footer-contact p {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+
+        .footer-contact i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3.2rem;
+            }
+
+            .about-content {
+                flex-direction: column;
+            }
+
+            .about-img, .about-text {
+                flex: none;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            nav {
+                position: fixed;
+                top: 100px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 100px);
+                background: var(--white);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 30px;
+                transition: all 0.5s ease;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            nav.active {
+                left: 0;
+            }
+
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            nav ul li {
+                margin: 15px 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            nav ul li a {
+                display: block;
+                padding: 12px 0;
+            }
+
+            .logo img {
+                height: 70px;
+            }
+
+            header.scrolled .logo img {
+                height: 50px;
+            }
+
+            .hero {
+                margin-top: -100px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .section-title h2 {
+                font-size: 2.2rem;
+            }
+
+            .testimonial-card {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .logo img {
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header con Logo Grande -->
+    <header id="header">
+        <div class="container header-container">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='css/img/img/Logo (2).png') }}" alt="CookyLanda">
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav id="nav">
+                <ul>
+                    <li><a href="#home">Inicio</a></li>
+                    <li><a href="#menu">Menú</a></li>
+                    <li><a href="#about">Nosotros</a></li>
+                    <li><a href="#testimonials">Testimonios</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                    <li><a href="{{ url_for('login') }}" class="login-btn"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section con Fondo -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Galletas Artesanales Hechas con Amor</h1>
+                <p>Descubre nuestra selección premium de galletas horneadas diariamente con ingredientes de la más alta calidad.</p>
+                <div class="hero-buttons">
+                    <a href="#menu" class="btn btn-primary"><i class="fas fa-utensils"></i> Ver Menú</a>
+                    <a href="{{ url_for('login') }}" class="btn btn-secondary"><i class="fas fa-shopping-bag"></i> Ordenar Ahora</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menú de Galletas -->
+    <section class="section" id="menu">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestras Especialidades</h2>
+                <p>Descubre nuestras galletas más populares, horneadas frescas cada día con ingredientes premium.</p>
+            </div>
+            
+            <div class="cookies-grid">
+                <div class="cookie-card">
+                    <div class="cookie-img">
+                        <img src="{{ url_for('static', filename='css/img/img/GalletaDulceDeLeche.png') }}" alt="Galleta Dulce de Leche">
+                    </div>
+                    <div class="cookie-info">
+                        <h3>Chocolate Dulce de Leche</h3>
+                        <p>Deliciosa galleta con trozos de chocolate belga y un toque de sal marina.</p>
+                        <div class="cookie-price">
+                            <span class="price">$24.50</span>
+                            <button class="btn btn-secondary">Añadir</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cookie-card">
+                    <div class="cookie-img">
+                        <img src="{{ url_for('static', filename='css/img/img/GalletaCombinada.png') }}" alt="Galleta Combinada">
+                    </div>
+                    <div class="cookie-info">
+                        <h3>Chocolate Combinada Supreme</h3>
+                        <p>Exquisita galleta de terciopelo combinada con chips de chocolate.</p>
+                        <div class="cookie-price">
+                            <span class="price">$19.75</span>
+                            <button class="btn btn-secondary">Añadir</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cookie-card">
+                    <div class="cookie-img">
+                        <img src="{{ url_for('static', filename='css/img/img/GalletaLuneta.png') }}" alt="Galleta Luneta">
+                    </div>
+                    <div class="cookie-info">
+                        <h3>Luneta Chocolate</h3>
+                        <p>Clásica galleta de chocolate con jarabe orgánico y pasas rubias.</p>
+                        <div class="cookie-price">
+                            <span class="price">$25.25</span>
+                            <button class="btn btn-secondary">Añadir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Nosotros -->
+    <section class="section about-section" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-img">
+                    <img src="{{ url_for('static', filename='css/img/img/tienda.webp') }}" alt="Nuestra tienda">
+                </div>
+                <div class="about-text">
+                    <h2>Nuestra Historia</h2>
+                    <p>CookyLanda nació en 2015 como un pequeño sueño en la cocina de nuestra fundadora, Yolanda. Lo que comenzó como una pasión por hornear galletas para familiares y amigos, se convirtió en un negocio próspero gracias al amor y dedicación que ponemos en cada producto.</p>
+                    <p>Hoy seguimos manteniendo esa esencia artesanal, usando solo ingredientes naturales y técnicas tradicionales que hacen que cada galleta sea una experiencia única.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section class="section testimonials-section" id="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Lo Que Dicen Nuestros Clientes</h2>
+                <p>La opinión de nuestros clientes es lo más importante para nosotros.</p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>Las mejores galletas que he probado en mi vida. El sabor y textura son perfectos. ¡No puedo dejar de ordenarlas cada semana!</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="{{ url_for('static', filename='css/img/img/persona1.webp') }}" alt="Carlos Martínez">
+                        </div>
+                        <div class="author-info">
+                            <h4>Carlos Martínez</h4>
+                            <p>Cliente desde 2018</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>CookyLanda se ha convertido en nuestra tradición familiar. Cada viernes ordenamos una caja para compartir. ¡Simplemente irresistibles!</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="{{ url_for('static', filename='css/img/img/persona2.jpg') }}" alt="Laura Sánchez">
+                        </div>
+                        <div class="author-info">
+                            <h4>Laura Sánchez</h4>
+                            <p>Cliente frecuente</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="{{ url_for('static', filename='css/img/img/Logo (2).png') }}" alt="CookyLanda">
+                    <p>Galletas artesanales horneadas con ingredientes premium y mucho amor.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Menú</h3>
+                    <ul>
+                        <li><a href="#menu">Galletas Clásicas</a></li>
+                        <li><a href="#menu">Especialidades</a></li>
+                        <li><a href="#menu">Edición Limitada</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Compañía</h3>
+                    <ul>
+                        <li><a href="#about">Nuestra Historia</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Trabaja con Nosotros</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Guanajuato 123, Leon, MX</p>
+                    <p><i class="fas fa-phone"></i> (123) 456-7890</p>
+                    <p><i class="fas fa-envelope"></i> hola@cookylanda.com</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 CookyLanda. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const nav = document.getElementById('nav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            mobileMenuBtn.innerHTML = nav.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        // Header Scroll Effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth Scrolling for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (this.getAttribute('href') === '#') return;
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (nav.classList.contains('active')) {
+                        nav.classList.remove('active');
+                        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                }
+            });
+        });
+
+        // Add to Cart Animation
+        const addButtons = document.querySelectorAll('.cookie-price button');
+        addButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const originalText = this.textContent;
+                this.innerHTML = '<i class="fas fa-check"></i> Añadido';
+                this.style.backgroundColor = '#4CAF50';
+                
+                setTimeout(() => {
+                    this.textContent = originalText;
+                    this.style.backgroundColor = '';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

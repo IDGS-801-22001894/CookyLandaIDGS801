@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Administrador{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-[#d1bfa3] flex justify-center items-center p-4">
+    <div class="bg-[#e6d9c3] p-8 rounded-lg w-full max-w-[95%] mx-auto"> <!-- Aumenté el ancho máximo -->
+        <!-- Contenedor del Formulario y la Tabla -->
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8"> <!-- Ajusté las proporciones de las columnas -->
+
+            <!-- Formulario de Creación de Usuario -->
+            <div class="bg-[#d1bfa3] p-8 rounded-lg">
+                <img
+                    src="{{ url_for('static', filename='css/img/img/Logo (2).png') }}"
+                    alt="Logo"
+                    class="mb-8 w-32 mx-auto"
+                />
+                <form method="POST" action="{{ url_for('admin') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="grid grid-cols-1 gap-4">
+                        <input
+                            class="bg-[#e6d9c3] p-3 rounded-lg text-[#5e3a2e] placeholder-[#5e3a2e] w-full"
+                            placeholder="Nombre completo"
+                            type="text"
+                            name="nombreCompleto"
+                            required
+                        />
+                        <input
+                            class="bg-[#e6d9c3] p-3 rounded-lg text-[#5e3a2e] placeholder-[#5e3a2e] w-full"
+                            placeholder="Apellido paterno"
+                            type="text"
+                            name="apePaterno"
+                            required
+                        />
+                        <input
+                            class="bg-[#e6d9c3] p-3 rounded-lg text-[#5e3a2e] placeholder-[#5e3a2e] w-full"
+                            placeholder="Apellido materno"
+                            type="text"
+                            name="apeMaterno"
+                            required
+                        />
+                        <input
+                            class="bg-[#e6d9c3] p-3 rounded-lg text-[#5e3a2e] placeholder-[#5e3a2e] w-full"
+                            placeholder="Usuario"
+                            type="text"
+                            name="usuario"
+                            required
+                        />
+                        <input
+                            class="bg-[#e6d9c3] p-3 rounded-lg text-[#5e3a2e] placeholder-[#5e3a2e] w-full"
+                            placeholder="Contraseña"
+                            type="password"
+                            name="contrasenia"
+                            required
+                        />
+                        <input
+                            class="bg-[#e6d9c3] p-3 rounded-lg text-[#5e3a2e] placeholder-[#5e3a2e] w-full"
+                            placeholder="Correo electrónico"
+                            type="email"
+                            name="correo"
+                            required
+                        />
+                        <select name="rol" class="bg-[#e6d9c3] p-3 rounded-lg text-[#5e3a2e] placeholder-[#5e3a2e] w-full" required>
+                 
+                            <option value="Vendedor">Vendedor</option>
+                            <option value="Cocinero">Cocinero</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="bg-[#5e3a2e] text-[#e6d9c3] px-6 py-2 rounded-lg w-full mt-4">
+                        Crear Usuario
+                    </button>
+                </form>
+            </div>
+
+            <!-- Contenedor de la Tabla -->
+            <div class="bg-[#e6d9c3] p-8 rounded-lg overflow-x-auto">
+                <div class="w-full min-w-[800px]"> <!-- Aumenté el ancho mínimo de la tabla -->
+                    <!-- Encabezado de la Tabla -->
+                    <div class="grid grid-cols-[2fr_2fr_3fr_2fr_1.5fr] bg-[#a67c6c] text-[#e6d9c3] p-4 rounded-t-lg text-center">
+                        <span>Nombre</span>
+                     
+                        <span>Usuario</span>
+                        <span>Correo</span>
+                        <span>Rol</span>
+                        <span>Acciones</span>
+                    </div>
+                    <!-- Cuerpo de la Tabla -->
+                    <div class="bg-[#d1bfa3]">
+                        {% for usuario in usuarios %}
+                        <div class="grid grid-cols-[2fr_2fr_3fr_2fr_1.5fr] text-center py-3 items-center border-b border-[#a67c6c]">
+                            <span class="truncate">{{ usuario.nombreCompleto }}</span>
+                            <span class="truncate">{{ usuario.usuario }}</span>
+                            <span class="truncate">{{ usuario.correo }}</span>
+                            <span class="truncate">{{ usuario.rol }}</span>
+                            <div class="flex justify-center items-center gap-2">
+                                <a href="{{ url_for('editar_usuario', id=usuario.idUsuario) }}" class="bg-[#f4c542] text-[#5e3a2e] px-3 py-1 rounded-lg text-sm whitespace-nowrap">
+                                    Editar
+                                </a>
+                                <form action="{{ url_for('eliminar_usuario', id=usuario.idUsuario) }}" method="POST" class="inline"
+                                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="bg-[#f4c542] text-[#5e3a2e] px-3 py-1 rounded-lg text-sm whitespace-nowrap">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Usuario{% endblock %}
+
+{% block body %}
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-4">Crear Usuario</h1>
+    <form method="POST" action="{{ url_for('crear_usuario') }}" class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+        <div class="mb-4">
+            <label for="nombreCompleto" class="block text-gray-700">Nombre Completo</label>
+            <input type="text" id="nombreCompleto" name="nombreCompleto" class="w-full px-3 py-2 border rounded-lg" required>
+        </div>
+        <div class="mb-4">
+            <label for="apePaterno" class="block text-gray-700">Apellido Paterno</label>
+            <input type="text" id="apePaterno" name="apePaterno" class="w-full px-3 py-2 border rounded-lg" required>
+        </div>
+        <div class="mb-4">
+            <label for="apeMaterno" class="block text-gray-700">Apellido Materno</label>
+            <input type="text" id="apeMaterno" name="apeMaterno" class="w-full px-3 py-2 border rounded-lg" required>
+        </div>
+        <div class="mb-4">
+            <label for="usuario" class="block text-gray-700">Usuario</label>
+            <input type="text" id="usuario" name="usuario" class="w-full px-3 py-2 border rounded-lg" required>
+        </div>
+        <div class="mb-4">
+            <label for="contrasenia" class="block text-gray-700">Contraseña</label>
+            <input type="password" id="contrasenia" name="contrasenia" class="w-full px-3 py-2 border rounded-lg" required>
+        </div>
+        <div class="mb-4">
+            <label for="correo" class="block text-gray-700">Correo Electrónico</label>
+            <input type="email" id="correo" name="correo" class="w-full px-3 py-2 border rounded-lg" required>
+        </div>
+        <div class="mb-4">
+            <label for="rol" class="block text-gray-700">Rol</label>
+            <select id="rol" name="rol" class="w-full px-3 py-2 border rounded-lg" required>
+                <option value="Administrador">Administrador</option>
+                <option value="Cliente">Cliente</option>
+                <option value="Vendedor">Vendedor</option>
+                <option value="Cocinero">Cocinero</option>
+            </select>
+        </div>
+        <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Crear Usuario</button>
+    </form>
+</div>
+{% endblock %}

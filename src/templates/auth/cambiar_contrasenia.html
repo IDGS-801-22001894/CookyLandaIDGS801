@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Cambiar Contraseña{% endblock %}
+
+{% block body %}
+<div class="login-container">
+    <div class="form-container">
+        <h1 class="h3 mb-3 fw-normal">Cambiar Contraseña</h1>
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-floating mt-2">
+                <label for="contrasenia_actual">Contraseña Actual</label>
+                <input type="password" class="form-control" id="contrasenia_actual" name="contrasenia_actual" required>
+            </div>
+            <div class="form-floating mt-2">
+                <label for="nueva_contrasenia">Nueva Contraseña</label>
+                <input type="password" class="form-control" id="nueva_contrasenia" name="nueva_contrasenia" required>
+            </div>
+            <div class="form-floating mt-2">
+                <label for="confirmar_contrasenia">Confirmar Nueva Contraseña</label>
+                <input type="password" class="form-control" id="confirmar_contrasenia" name="confirmar_contrasenia" required>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Cambiar Contraseña</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
