@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Vendedor{% endblock %}
+
+{% block customCSS %}
+<style>
+    body {
+        background-image: url("{{ url_for('static', filename='css/img/img/fondo.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-family: 'Roboto', sans-serif;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="relative w-full h-full flex items-center justify-center">
+    <div class="text-center z-10">
+        <h1 class="text-5xl font-bold text-[#7A3E3E]">
+            Bienvenido 
+        </h1>
+        <p class="text-3xl font-semibold text-[#7A3E3E] mt-2">
+            Vendedor, {{ current_user.usuario }} !
+        </p>
+        <a href="{{ url_for('logout') }}" class="text-lg text-[#7A3E3E] mt-4 hover:underline">
+            Cerrar sesión
+        </a>
+    </div>
+</div>
+{% endblock %}

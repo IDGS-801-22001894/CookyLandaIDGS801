@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <!-- Enlaces condicionales según el rol -->
+    <div class="bg-[#7A3E3E] p-4 text-white">
+        {% if current_user.rol == 'Administrador' %}
+            <a href="{{ url_for('admin') }}" class="mr-4 hover:underline">Administración</a>
+        {% endif %}
+
+        {% if current_user.rol == 'Cocinero' %}
+            <a href="{{ url_for('recetas') }}" class="mr-4 hover:underline">Recetas</a>
+        {% endif %}
+
+        {% if current_user.rol == 'Vendedor' %}
+            <a href="{{ url_for('ventas') }}" class="mr-4 hover:underline">Ventas</a>
+        {% endif %}
+
+        {% if current_user.rol == 'Cliente' %}
+            <a href="{{ url_for('catalogo') }}" class="mr-4 hover:underline">Catálogo</a>
+        {% endif %}
+    </div>
+
+    <!-- Contenido específico de la página -->
+    {% block content %}
+    {% endblock %}
+{% endblock %}
