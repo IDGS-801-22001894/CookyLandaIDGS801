@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Validar Token{% endblock %}
+
+{% block body %}
+<div class="login-container">
+    <div class="form-logo">
+        <img src="{{ url_for('static', filename='css/img/img/Logo (2).png') }}" alt="Logo">
+
+    </div>
+    <div class="form-content">
+        <h1>Validar Token</h1>
+        <p>Escanea este código QR con Google Authenticator:</p>
+        <div class="qr-container">
+            <img src="data:image/png;base64,{{ qr_code }}" alt="Código QR" class="qr-code">
+        </div>
+        <form method="POST" class="form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label for="token">Token</label>
+                <input type="text" id="token" name="token" placeholder="Ingresa tu token" required>
+            </div>
+            <button type="submit" class="btn-primary">Validar Token</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block customCSS %}
+<style>
+    body {
+        background: linear-gradient(135deg, #e8e4d9, #d1bfa3); /* Colores de tu gama */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+    }
+    .login-container {
+        background-color: #e8e4d9;
+        border-radius: 15px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+        padding: 2rem;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+    .form-logo .logo {
+        max-width: 150px;
+        margin-bottom: 1rem;
+    }
+    h1 {
+        font-size: 1.8rem;
+        color: #7b4b3a;
+        margin-bottom: 1.5rem;
+    }
+    p {
+        font-size: 1rem;
+        color: #7b4b3a;
+        margin-bottom: 1rem;
+    }
+    .qr-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+    .qr-code {
+        width: 200px;
+        height: 200px;
+    }
+    .form-group {
+        text-align: center; /* Centrar el texto de la etiqueta */
+        margin-bottom: 1rem;
+    }
+    .form-group label {
+        font-weight: bold;
+        font-size: 0.9rem;
+        color: #7b4b3a;
+    }
+    .form-group input {
+        width: 100%;
+        text-align: center; /* Centrar el texto del placeholder */
+        padding: 0.5rem;
+        background-color: #d1bfa3;
+        border: none;
+        border-radius: 5px;
+        margin-top: 0.5rem;
+        color: #7b4b3a;
+        font-size: 1rem;
+    }
+    .form-group input::placeholder {
+        text-align: center; /* Centrar el texto del placeholder */
+        color: #7b4b3a;
+    }
+    .btn-primary {
+        background-color: #7b4b3a;
+        color: white;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 1rem;
+    }
+    .btn-primary:hover {
+        background-color: #5e3225;
+    }
+</style>
+{% endblock %}

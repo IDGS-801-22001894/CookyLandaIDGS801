@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro{% endblock %}
+
+{% block customCSS %}
+<style>
+    body {
+        background-image: url("{{ url_for('static', filename='css/img/img/fondo.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-family: 'Roboto', sans-serif;
+    }
+    .login-container {
+        background-color: #e8e4d9;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 800px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .logo-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .logo-container img {
+        width: 300px;
+        height: 150px;
+    }
+    .form-container {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .form-container h1 {
+        color: #7b4b3a;
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+        font-weight: bold;
+    }
+    .form-container input {
+        background-color: #d1bfa3;
+        color: #7b4b3a;
+        border: none;
+        border-radius: 0.375rem;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        width: 100%;
+        max-width: 300px;
+    }
+    .form-container input::placeholder {
+        color: #7b4b3a;
+    }
+    .form-container button {
+        background-color: #7b4b3a;
+        color: white;
+        border: none;
+        border-radius: 0.375rem;
+        padding: 0.5rem;
+        width: 100%;
+        max-width: 300px;
+        cursor: pointer;
+    }
+    .form-container a {
+        color: #7b4b3a;
+        text-decoration: none;
+    }
+    .form-container a:hover {
+        text-decoration: underline;
+    }
+    /* Estilos para los mensajes Flash */
+    .alert {
+        width: 100%;
+        max-width: 300px;
+        margin-bottom: 1rem;
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        text-align: center;
+    }
+    .alert-success {
+        background-color: #007bff; /* Azul */
+        color: white;
+    }
+    .alert-error {
+        background-color: #dc3545; /* Rojo */
+        color: white;
+    }
+    /* Estilos para reCAPTCHA */
+    .g-recaptcha {
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="login-container">
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='css/img/img/Logo (2).png') }}" alt="Logo">
+    </div>
+
+    <div class="form-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <h1 class="h3 mb-3 fw-normal">Registro</h1>
+        <form class="form-signin" action="{{ url_for('registro') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <!-- Nombre Completo -->
+            <div class="form-floating">
+                <label for="nombreCompleto">Nombre Completo</label>
+                <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto" 
+                       placeholder="Nombre Completo" 
+                       pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,}" 
+                       title="El nombre debe contener solo letras y espacios, y tener al menos 2 caracteres." 
+                       required>
+            </div>
+            <!-- Apellido Paterno -->
+            <div class="form-floating mt-2">
+                <label for="apePaterno">Apellido Paterno</label>
+                <input type="text" class="form-control" id="apePaterno" name="apePaterno" 
+                       placeholder="Apellido Paterno" 
+                       pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,}" 
+                       title="El apellido paterno debe contener solo letras y espacios, y tener al menos 2 caracteres." 
+                       required>
+            </div>
+            <!-- Apellido Materno -->
+            <div class="form-floating mt-2">
+                <label for="apeMaterno">Apellido Materno</label>
+                <input type="text" class="form-control" id="apeMaterno" name="apeMaterno" 
+                       placeholder="Apellido Materno" 
+                       pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,}" 
+                       title="El apellido materno debe contener solo letras y espacios, y tener al menos 2 caracteres." 
+                       required>
+            </div>
+            <!-- Usuario -->
+            <div class="form-floating mt-2">
+                <label for="usuario">Usuario</label>
+                <input type="text" class="form-control" id="usuario" name="usuario" 
+                       placeholder="Usuario" 
+                       pattern="[a-zA-Z0-9_]{5,20}" 
+                       title="El usuario debe tener entre 5 y 20 caracteres y solo puede contener letras, números y guiones bajos." 
+                       required>
+            </div>
+            <!-- Contraseña -->
+            <div class="form-floating mt-2">
+                <label for="contrasenia">Contraseña</label>
+                <input type="password" class="form-control" id="contrasenia" name="contrasenia" 
+                       placeholder="Contraseña" 
+                       minlength="8" 
+                       title="La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial." 
+                       required>
+            </div>
+            <!-- Correo Electrónico -->
+            <div class="form-floating mt-2">
+                <label for="correo">Correo Electrónico</label>
+                <input type="email" class="form-control" id="correo" name="correo" 
+                       placeholder="Correo Electrónico" 
+                       required>
+            </div>
+          
+            <!-- Widget de reCAPTCHA -->
+            <div class="g-recaptcha" data-sitekey="{{ recaptcha_public_key }}"></div>
+
+            <!-- Botón de envío -->
+            <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Crear Usuario</button>
+        </form>
+    </div>
+</div>
+
+<!-- Script de reCAPTCHA -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+{% endblock %}
