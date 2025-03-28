@@ -23,7 +23,7 @@ app.secret_key="esta es una clave secreta"
 csrf = CSRFProtect(app)
 
 #ANDREA ------------------------------------------------------------------------
-
+print("HOLA")
 @app.route('/')
 def index():
     return render_template('index.html')
