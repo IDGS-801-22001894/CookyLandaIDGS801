@@ -1,0 +1,242 @@
+{% extends "layout.html" %}
+{% from "_macros.html" import input_fielda, select_fielda %}
+
+{% block title %}Registro de Receta{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="../static/registro.css">
+{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+
+    <!-- Mensajes de Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  
+
+  <div class="card card-custom shadow-lg" id="formulario" style="display: block !important;">
+    <img src="../static/img/cerrar.png" alt="Cerrar" class="close-btn" id="btnCerrar">
+    <div class="card-header-custom">RECETA</div>
+    <div class="form-container">
+      <form method="POST" action="{{ url_for('modificar_receta', idReceta=receta.idReceta) }}" enctype="multipart/form-data">
+
+        {{ form.hidden_tag() }}
+        <input type="hidden" name="idReceta" value="{{ receta.idReceta }}">
+
+        <div class="row">
+          <div class="col-6">
+            {{ input_fielda(form.codigoUsuario) }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            {{ input_fielda(form.nombreGalleta) }}
+          </div>
+
+            <div class="col-6">
+              {{ select_fielda(form.estatus) }}
+            </div>
+
+        </div>
+
+        <div class="row">
+          <h5>Ingredientes Base</h5>
+        </div>
+
+        <div class="row"></div>
+
+        <div class="row">
+          <div class="col-6">
+            {{ select_fielda(form.cmbHarina) }}
+          </div>
+
+          <div class="col-6">
+            {{ select_fielda(form.cantHar) }}
+          </div>
+
+
+        </div>
+
+
+        <div class="row">
+          <div class="col-6">
+            {{ select_fielda(form.cmbMantequilla) }}
+          </div>
+
+          <div class="col-6">
+            {{ select_fielda(form.cantMan) }}
+          </div>
+
+        </div>
+
+
+        <div class="row">
+          <div class="col-6">
+            {{ select_fielda(form.cmbAzucar) }}
+          </div>
+
+          <div class="col-6">
+            {{ select_fielda(form.cantAzur) }}
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            {{ select_fielda(form.cmbHuevo) }}
+          </div>
+
+          <div class="col-6">
+            {{ select_fielda(form.cantHuv) }}
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            {{ select_fielda(form.cmbVainilla) }}
+          </div>
+
+          <div class="col-6">
+            {{ select_fielda(form.cantVain) }}
+          </div>
+
+          
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            {{ select_fielda(form.cmbPolvo) }}
+          </div>
+
+          <div class="col-6">
+            {{ select_fielda(form.cantHor) }}
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            {{ select_fielda(form.cmbSal) }}
+          </div>
+
+          <div class="col-6">
+            {{ select_fielda(form.cantSal) }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            {{ select_fielda(form.cmbLe) }}
+          </div>
+
+          <div class="col-6">
+            {{ select_fielda(form.cantLech) }}
+          </div>
+        </div>
+
+        <div class="row">
+          <h5>Ingrediente Adicional</h5>
+        </div>
+
+        <div class="row"></div>
+
+        <div class="row">
+
+          <div class="col-6">
+            {{ input_fielda(form.adicional) }}
+          </div>
+
+          <div class="col-6">
+            {{ input_fielda(form.cantAdicional) }}
+          </div>
+
+        </div>
+
+        <div class="row mt-1">
+          <div class="col-12">
+            {{ input_fielda(form.procedimiento) }}
+          </div>
+        </div>
+
+        <div class="row">
+
+          <div class="col-12">
+
+            <div class="form-group">
+                <label>Imagen de la receta</label>
+                <input type="file" name="imagen" class="form-control">
+            </div>
+
+          </div>
+
+        </div>
+
+        
+
+        <div class="row">
+            <div class="d-flex justify-content-between mt-1">
+                <div class="col-12 d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <a href="{{ url_for('catalogoReceta') }}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    
+
+    
+
+
+
+
+    </div>
+  </div>
+
+
+
+
+</div>
+
+
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Cuando se hace clic en "Agregar"
+  document.getElementById('btnAgregar').addEventListener('click', () => {
+    const modal = document.getElementById('codigoUsuarioModal');
+    modal.style.display = 'block';
+  });
+
+  // Cierra el formulario al hacer clic en el botón "Cerrar"
+  document.getElementById('btnCerrar').addEventListener('click', () => {
+    document.getElementById('formulario').style.display = 'none';
+    document.getElementById('tabla').style.display = 'block';
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Forzar mostrar formulario
+    document.getElementById('formulario').style.display = 'block';
+    
+    // Eliminar elementos de tabla si existen
+    const tabla = document.getElementById('tabla');
+    if(tabla) tabla.remove();
+  });
+
+  
+</script>
+{% endblock %}

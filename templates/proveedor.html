@@ -1,0 +1,146 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% import "_macros.html" as macro %}
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+    <div class="container mt-5">
+        <h1 class="text-center header">PROVEEDORES</h1>
+
+        <form id="proveedorForm" method="POST">
+            {{ form.hidden_tag() }}  <!-- Token CSRF aquí -->
+            <div class="row">
+                <!-- Columna izquierda -->
+                <div class="col-md-4">
+                    <div class="mb-5"> {{ macro.input_field("text", "nombre", "Nombre" ) }} </div>
+                    <div class="mb-5"> {{ macro.input_field("text", "direccion", "Dirección") }} </div>
+                </div>
+                
+                <!-- Columna central -->
+                <div class="col-md-4">
+                    <div class="mb-5"> {{ macro.input_field("tel", "telefono", "Teléfono") }} </div>
+                    <div class="mb-5"> {{ macro.input_field("email", "correo", "Correo") }} </div>
+                </div>
+                
+                <!-- Columna derecha -->
+                <div class="col-md-4">
+                    <div class="mb-5"> {{ macro.input_field("text", "vendedor", "Vendedor", ["Principal", "Secundario"]) }} </div>
+                    <div class="mb-5"> {{ macro.input_field("text", "empresa", "Empresa") }} </div>
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="text-center mt-3">
+                <button type="button" class="buttonAG" onclick="confirmarAccion('submit_agregar')">Agregar</button>
+                <button type="button" class="buttonMo" onclick="confirmarAccion('submit_modificar')">Modificar</button>
+                <button type="button" class="buttonEl" onclick="confirmarAccion('submit_eliminar')">Eliminar</button>
+            </div>
+
+            <input type="hidden" id="actionType" name="actionType">
+            <input type="hidden" id="codigoUsuario" name="codigoUsuario">
+
+<!-- Agregamos un campo oculto para el ID -->
+<input type="hidden" id="idProveedor" name="idProveedor">
+        </form>
+    </div>
+
+    <!-- Script para SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmarAccion(action) {
+            Swal.fire({
+                title: "Ingrese el código de usuario",
+                input: "text",
+                inputPlaceholder: "Código de usuario",
+                showCancelButton: true,
+                confirmButtonText: "Confirmar",
+                cancelButtonText: "Cancelar",
+                inputValidator: (value) => {
+                    if (!value) {
+                        return "Debe ingresar el código de usuario";
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById("codigoUsuario").value = result.value;
+                    document.getElementById("actionType").value = action;
+                    
+                    // Agregar un input oculto con el nombre del botón para identificar la acción
+                    let inputAccion = document.createElement("input");
+                    inputAccion.type = "hidden";
+                    inputAccion.name = action;
+                    inputAccion.value = "1";
+                    document.getElementById("proveedorForm").appendChild(inputAccion);
+
+                    document.getElementById("proveedorForm").submit();
+                }
+            });
+        }
+    </script>
+
+
+   <!-- Tabla de proveedores -->
+<div class="mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Empresa</th>
+                <th>Dirección</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proveedor in proveedores %}
+            <tr onclick="seleccionarProveedor(this)"
+                data-id="{{ proveedor.idProveedor }}"
+                data-nombre="{{ proveedor.nombreProveedor }}"
+                data-telefono="{{ proveedor.telefono }}"
+                data-empresa="{{ proveedor.empresa }}"
+                data-direccion="{{ proveedor.direccion }}"
+                data-correo="{{ proveedor.correo }}"
+                data-vendedor="{{ proveedor.tipoVendedor }}">
+                <td>{{ proveedor.nombreProveedor }}</td>
+                <td>{{ proveedor.telefono }}</td>
+                <td>{{ proveedor.empresa }}</td>
+                <td>{{ proveedor.direccion }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    function seleccionarProveedor(fila) {
+        document.getElementById("idProveedor").value = fila.getAttribute("data-id");
+        document.getElementById("nombre").value = fila.getAttribute("data-nombre");
+        document.getElementById("telefono").value = fila.getAttribute("data-telefono");
+        document.getElementById("empresa").value = fila.getAttribute("data-empresa");
+        document.getElementById("direccion").value = fila.getAttribute("data-direccion");
+        document.getElementById("correo").value = fila.getAttribute("data-correo");
+        
+        // Manejo de select para vendedor
+        let vendedor = fila.getAttribute("data-vendedor");
+        let vendedorSelect = document.getElementById("vendedor");
+        for (let i = 0; i < vendedorSelect.options.length; i++) {
+            if (vendedorSelect.options[i].value === vendedor) {
+                vendedorSelect.selectedIndex = i;
+                break;
+            }
+        }
+    }
+</script>
+
+
+{% for field, errors in form.errors.items() %}
+    {% for error in errors %}
+        <div class="alert alert-danger">
+            {{ field }}: {{ error }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+
+{% endblock %}
+

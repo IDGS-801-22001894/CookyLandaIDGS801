@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}Catálogo de Recetas{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='catalogoReceta.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <!-- Icono en la esquina superior derecha -->
+    <a href="{{ url_for('registro_receta') }}" target="_blank" class="receta-icon">
+      <img src="{{ url_for('static', filename='img/recetas.png') }}" alt="Recetas">
+    </a>
+
+    <div class="content">
+      <h2>Catálogo Recetas</h2>
+      <div class="gallery-container">
+        <div class="gallery">
+          {% for receta in recetas %}
+          <div class="cookie-card">
+            <a href="{{ url_for('verReceta', id=receta.idReceta) }}" target="_blank" class="card-link">
+              <div class="card">
+                {% if receta.imagen %}
+                <img src="data:image/png;base64,{{ receta.imagen }}" alt="{{ receta.nombreGalleta }}">
+                {% else %}
+                <img src="{{ url_for('static', filename='img/default-cookie.png') }}" alt="Imagen predeterminada">
+                {% endif %}
+                <div class="hover-text">Ver receta</div>
+              </div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

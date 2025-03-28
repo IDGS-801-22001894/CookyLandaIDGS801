@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Menú Principal{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://unpkg.com/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/estilo.css">
+    <link rel="stylesheet" href="../static/menu.css">
+    <link rel="icon" href="../static/img/Logo (2).png" type="image/png">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    <div class="area"></div>
+
+    <nav class="main-menu">
+        <ul>
+            <li>
+                <a href="{{ url_for('home') }}">
+                    <img src="../static/img/casa.png" alt="Menu" class="nav-icon-img menu-icon">
+                    <span class="nav-text">Menu</span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                    <img src="../static/img/Ventas.png" alt="Ventas" class="nav-icon-img ventas-icon">
+                    <span class="nav-text">Ventas</span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                    <img src="../static/img/inventario.png" alt="Producción" class="nav-icon-img produccion-icon">
+                    <span class="nav-text">Producción</span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="{{ url_for('catalogoReceta') }}" target="_blank" class="receta-icon">
+                    <img src="../static/img/recetas.png" alt="Receta" class="nav-icon-img produccion-icon">
+                    <span class="nav-text">Recetas</span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                    <img src="../static/img/caducidad.png" alt="Caducidad" class="nav-icon-img recetas-icon">
+                    <span class="nav-text">Caducidades</span>
+                </a>
+            </li>
+            <li>
+                <a href="Recetas.html">
+                    <img src="../static/img/iconoganancias.png" alt="Dashboard" class="nav-icon-img dashboard-icon">
+                    <span class="nav-text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/proveedores">
+                    <img src="../static/img/proveedor.png" alt="Proveedores" class="nav-icon-img proveedores-icon">
+                    <span class="nav-text">Proveedores</span>
+                </a>
+            </li>
+            <li>
+                <a href="/compra">
+                    <img src="../static/img/compras.png" alt="Compras" class="nav-icon-img compras-icon">
+                    <span class="nav-text">Compras</span>
+                </a>
+            </li>
+            <li>
+                <a href="/materia">
+                    <img src="../static/img/materiaPrima.png" alt="Materia Prima" class="nav-icon-img materia-prima-icon">
+                    <span class="nav-text">Materia Prima</span>
+                </a>
+            </li>
+            <li>
+                <a href="Compras.html">
+                    <img src="../static/img/Merma.png" alt="Mermas" class="nav-icon-img mermas-icon">
+                    <span class="nav-text">Mermas</span>
+                </a>
+            </li>
+            <li>
+                <a href="Compras.html">
+                    <img src="../static/img/agregarUsuario.png" alt="Crear Usuario" class="nav-icon-img crear-usuario-icon">
+                    <span class="nav-text">Crear Usuario</span>
+                </a>
+            </li>
+            <li>
+                <a href="Compras.html">
+                    <img src="../static/img/cerrar sesion.png" alt="Cerrar Sesión" class="nav-icon-img cerrar-sesion-icon">
+                    <span class="nav-text">Cerrar Sesión</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="container mt-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

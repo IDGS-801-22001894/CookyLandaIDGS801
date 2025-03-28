@@ -1,0 +1,147 @@
+/* Fondo con imagen */
+body {
+    background: url('../static/img/fondo.png') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Contenedor principal */
+.container {
+    padding: 20px;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Contenedor del card con scroll */
+.card-container {
+    max-height: 85vh;
+    overflow-y: auto;
+    width: 100%;
+    padding: 10px;
+}
+
+/* Card centrado */
+.card {
+    background-color: rgba(203, 184, 157, 0.9);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Icono de atrás */
+.back-icon {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 10;
+}
+.back-icon img {
+    width: 40px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+.back-icon img:hover {
+    transform: scale(1.1);
+}
+
+/* Imagen y nombre de la galleta */
+.galleta-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid #B67308;
+    margin: 0 auto 15px;
+    display: block;
+}
+
+.card h1 {
+    color: #B67308;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Sección de ingredientes */
+.ingredientes {
+    margin-bottom: 15px;
+}
+
+.ingredientes h2, .procedimiento h2 {
+    color: #B67308;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    text-align: left;
+    border-bottom: 2px solid #B67308;
+    padding-bottom: 3px;
+}
+
+.list-group {
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.list-group-item {
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(182, 115, 8, 0.3);
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+/* Sección de procedimiento */
+.procedimiento-texto {
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(182, 115, 8, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+/* Scroll personalizado */
+.card-container::-webkit-scrollbar {
+    width: 8px;
+}
+.card-container::-webkit-scrollbar-track {
+    background: rgba(203, 184, 157, 0.3);
+    border-radius: 10px;
+}
+.card-container::-webkit-scrollbar-thumb {
+    background: rgba(184, 137, 92, 0.8);
+    border-radius: 10px;
+}
+.card-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(166, 120, 78, 0.9);
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 576px) {
+    .card {
+        padding: 15px;
+    }
+    .galleta-img {
+        width: 120px;
+        height: 120px;
+    }
+    .card h1 {
+        font-size: 20px;
+    }
+    .ingredientes h2, .procedimiento h2 {
+        font-size: 16px;
+    }
+    .list-group-item, .procedimiento-texto {
+        font-size: 13px;
+    }
+}

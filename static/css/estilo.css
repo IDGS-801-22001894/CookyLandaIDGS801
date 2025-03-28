@@ -1,0 +1,377 @@
+css 
+
+/* Barra de navegación */
+
+html, body {
+    height: 100%; /* Altura completa */
+    margin: 0; /* Sin márgenes */
+    background: url('../img/fondo.png') no-repeat center center fixed;
+    background-size: cover; /* Asegura que cubra todo */
+    overflow-x: hidden; /* Evita el scroll horizontal */
+    z-index: 0; /* Asegura que esté detrás de la barra */
+}
+
+@import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+@import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);
+
+.fa-2x {
+    font-size: 2em;
+}
+.fa {
+    position: relative;
+    display: table-cell;
+    width: 60px;
+    height: 36px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.main-menu {
+    background: url('../img/fondoLateral.png') no-repeat center center;
+    background-size: cover;
+    border-right: 1px solid #e5e5e5;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    width: 60px;
+    overflow: hidden;
+    -webkit-transition: width 0.3s linear;
+    transition: width 0.3s linear;
+    z-index: 10; /* Superior a los botones */
+}
+
+.main-menu:hover, nav.main-menu.expanded {
+    width: 250px; /* Ancho cuando se expande */
+    overflow: visible;
+}
+
+.main-menu>ul {
+    margin: 7px 0;
+}
+
+.main-menu li {
+    position: relative;
+    display: flex;
+    align-items: center; /* Alinear verticalmente */
+    justify-content: flex-start; /* Mantener íconos a la izquierda */
+    padding: 10px 15px; /* Espaciado */
+}
+
+.main-menu li>a {
+    position: relative;
+    display: flex;
+    align-items: center; /* Alineación uniforme ícono y texto */
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: #000000;
+    font-family: arial;
+    font-size: 16px; /* Tamaño de fuente aumentado */
+    text-decoration: none;
+    -webkit-transform: translateZ(0) scale(1, 1);
+    -webkit-transition: all .1s linear;
+    transition: all .1s linear;
+}
+
+/* Ocultar texto inicialmente */
+.main-menu .nav-text {
+    display: none;
+    opacity: 0;
+    padding-left: 15px; /* Alinear uniformemente con los íconos */
+    -webkit-transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Mostrar texto al expandir */
+.main-menu:hover .nav-text {
+    display: inline; /* Mostrar texto */
+    opacity: 1; /* Hacer visible */
+    text-align: left; /* Alinear texto a la izquierda */
+}
+
+/* Ajuste general de íconos */
+.nav-icon-img {
+    width: 50px; /* Tamaño base de los íconos */
+    height: auto;
+    margin-right: 10px; /* Espaciado general entre ícono y texto */
+}
+
+/* Ajustes específicos para Menu y Ventas */
+
+/* Texto de Menu */
+.main-menu li:first-child .nav-text {
+    padding-left: 25px; /* Desplazar texto hacia la derecha (→) */
+}
+
+/* Texto de Ventas */
+.nav-icon-img.ventas-icon + .nav-text {
+    padding-left: 25px; /* Desplazar texto hacia la derecha (→) */
+}
+
+/* Ícono del menú */
+.nav-icon-img.menu-icon {
+    width: 32px; /* Ajustar tamaño específico */
+}
+
+/* Ícono de Ventas */
+.nav-icon-img.ventas-icon {
+    width: 32px; /* Ajustar tamaño específico */
+}
+
+/* Ícono de Producción */
+.nav-icon-img.produccion-icon {
+    width: 60px; /* Tamaño del ícono */
+    height: auto;
+    margin-left: -10px; /* Mover más hacia la izquierda */
+}
+
+/* Ícono de Recetas */
+.nav-icon-img.recetas-icon {
+    width: 50px;
+}
+
+/* Ícono del Dashboard */
+.nav-icon-img.dashboard-icon {
+    width: 50px;
+}
+
+/* Ícono de Proveedores */
+.nav-icon-img.proveedores-icon {
+    width: 50px;
+}
+
+/* Ícono de Compras */
+.nav-icon-img.compras-icon {
+    width: 50px;
+}
+
+/* Ícono de Materia Prima */
+.nav-icon-img.materia-prima-icon {
+    width: 50px;
+}
+
+/* Ícono de Mermas */
+.nav-icon-img.mermas-icon {
+    width: 50px;
+}
+
+/* Ícono de Crear Usuario */
+.nav-icon-img.crear-usuario-icon {
+    width: 40px;
+}
+
+/* Ícono de Cerrar Sesión */
+.nav-icon-img.cerrar-sesion-icon {
+    width: 40px;
+}
+
+.main-menu>ul.logout {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.no-touch .scrollable.hover {
+    overflow-y: hidden;
+}
+
+.no-touch .scrollable.hover:hover {
+    overflow-y: auto;
+    overflow: visible;
+}
+
+a:hover, a:focus {
+    text-decoration: none;
+}
+
+nav {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+nav ul, nav li {
+    outline: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none; /* Quitar puntos de la lista */
+}
+
+/* Ajuste general */
+img {
+    width: 70%;
+}
+
+
+/* --------------------Tabla ------------------------------------------------------- 
+
+
+/* -------------------- Botón izquierdo -------------------- */
+.btn-left {
+    position: fixed;
+    top: 25px;
+    left: 75px;
+    z-index: 5; /* Menor que la barra de navegación */
+}
+
+.btn-left img {
+    width: 99px;
+    height: 99px;
+    cursor: pointer;
+}
+
+/* -------------------- Botón derecho -------------------- */
+.btn-right {
+    position: fixed;
+    top: 25px;
+    right: 15px;
+    z-index: 5; /* Menor que la barra de navegación */
+}
+
+.btn-right img {
+    width: 115px;
+    height: 99px;
+    cursor: pointer;
+}
+
+
+/* Ajuste de logo centrado, grande y separado */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px 0; /* espacio arriba y abajo */
+}
+
+.logo-container img {
+    max-width: 500px; /* Puedes cambiar el tamaño, ej: 400px */
+    height: auto;
+}
+
+/* Estilo personalizado para centrar la tabla */
+.table {
+    width: 80%; /* Ajusta el ancho de la tabla */
+    margin: 0 auto; /* Centrada */
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    border-collapse: collapse; /* Bordes colapsados */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Estilo para la cabecera */
+.table thead th {
+    background-color: #B1847A; /* Color cabecera */
+    color: white; /* Texto blanco */
+    padding: 12px;
+    text-align: center;
+    font-size: 18px;
+}
+
+/* Estilo para las celdas del cuerpo */
+.table tbody td {
+    background-color: #E3CFC2; /* Color celdas */
+    padding: 12px;
+    font-size: 16px;
+    text-align: center;
+    border: 1px solid white; /* Línea blanca entre celdas */
+}
+
+/* Bordes y tamaño uniforme */
+.table th, .table td {
+    border: 1px solid #B1847A;
+}
+
+/* Opcional: efecto hover */
+.table tbody tr:hover {
+    background-color: #d4b6aa; /* Color más oscuro al pasar el mouse */
+}
+
+/* DISEÑO DEL CRUD */
+
+        .header {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            color: #B67308;
+        }
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+        .input-field {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 0.25rem;
+            width: 200px;
+        }
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .buttonAg {
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            background-color: FBB33E;
+
+        }
+        .buttonMo {
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            background-color: 5291D9;
+
+        }
+        .buttonEl {
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            background-color: FB3E3E;
+
+        }
+        .add-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .edit-button {
+            background-color: #1D4ED8;
+            color: white;
+        }
+        .delete-button {
+            background-color: #DC2626;
+            color: white;
+        }
+        .table-container {
+            width: 80%;
+            margin: 2rem auto;
+            border-collapse: collapse;
+        }
+        .table {
+            width: 100%;
+            border: 1px solid #e5e7eb;
+        }
+        .table th, .table td {
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            text-align: center;
+        }
+        .table th {
+            background-color: #e4d0b2;
+            font-weight: bold;
+        }
+        .table td {
+            background-color: #f3e2c9;
+        }
+    
+

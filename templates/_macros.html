@@ -1,0 +1,60 @@
+{% macro input_field(type, name, placeholder, options=[]) %}
+    <div class="mb-3">
+        {% if options %}
+            <select class="form-select" name="{{ name }}" id="{{ name }}" required>
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == "Proveedor 1" %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+        {% else %}
+            <input type="{{ type }}" class="form-control" name="{{ name }}" id="{{ name }}" placeholder="{{ placeholder }}"
+                {% if type == "email" %} pattern="^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$" title="Ingrese un correo válido" {% endif %}
+                {% if type == "tel" %} pattern="\\d{10}" title="Ingrese un número de 10 dígitos" {% endif %}
+                oninput="this.value = this.value.replace(/[^a-zA-Z0-9@. ]/g, '')"  required>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+
+
+
+{% macro select_fielda(field, quantity_field=None) %}
+    <div class="mb-3">
+        <label class="form-label">{{ field.label.text }}</label>
+        {{ field(class="form-select") }}
+        
+        {% if quantity_field %}
+            <label class="form-label">{{ quantity_field.label.text }}</label>
+            {{ quantity_field(class="form-control", placeholder=quantity_field.label.text) }}
+        {% endif %}
+        
+        {% if field.errors or (quantity_field and quantity_field.errors) %}
+            <ul class="text-danger">
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                {% if quantity_field %}
+                    {% for error in quantity_field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+
+{% macro input_fielda(field) %}
+    <div class="mb-3">
+        <label class="form-label">{{ field.label.text }}</label>
+        {{ field(class="form-control", placeholder=field.label.text) }}
+        {% if field.errors %}
+            <ul class="text-danger">
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endmacro %}
+

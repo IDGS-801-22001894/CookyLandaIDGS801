@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% import "_macros.html" as macro %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/stilo.css') }}">
+<!-- Incluir SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container mt-5">
+    <h1 class="text-center header">MATERIA PRIMA</h1>
+</div>
+
+<!-- Tabla de materia prima -->
+<div class="mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad (Kg/L)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for materia in materias %}
+            <tr>
+                <td>{{ materia.nombreProducto }}</td>
+                <td>
+                    {% if materia.cantidad == 0 %}
+                        <span class="text-danger">AGOTADO</span>
+                    {% else %}
+                        {{ "%.2f"|format(materia.cantidad) }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Script para mostrar SweetAlert si la cantidad está entre 1 y 10 -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const materias = {{ materias | tojson | safe }};
+        const productosPorTerminarse = materias.filter(m => m.cantidad > 0 && m.cantidad <= 10);
+
+        if (productosPorTerminarse.length > 0) {
+            const productosLista = productosPorTerminarse.map(m => `- ${m.nombreProducto}: ${m.cantidad}`).join('\n');
+            Swal.fire({
+                title: '¡Atención!',
+                text: `Los siguientes productos están por terminarse:\n${productosLista}`,
+                icon: 'warning',
+                confirmButtonText: 'Entendido'
+            });
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ receta.nombreGalleta }}{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='verGalleta.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center">
+    <div class="card-container">
+        <div class="card p-3">
+            <!-- Ícono de Atrás -->
+            <a href="{{ url_for('catalogoReceta') }}" class="back-icon">
+                <img src="{{ url_for('static', filename='img/flechaAtras.png') }}" alt="Atrás">
+            </a>
+
+            <!-- Imagen y nombre de la galleta -->
+            <div class="text-center mb-3">
+                {% if receta.imagen %}
+                <img src="data:image/jpeg;base64,{{ receta.imagen }}" alt="{{ receta.nombreGalleta }}" class="galleta-img">
+                {% else %}
+                <img src="{{ url_for('static', filename='img/default-cookie.png') }}" alt="Imagen predeterminada" class="galleta-img">
+                {% endif %}
+                <h1>{{ receta.nombreGalleta }}</h1>
+            </div>
+
+            <!-- Sección de Ingredientes -->
+            <div class="ingredientes">
+                <h2>Ingredientes</h2>
+                <ul class="list-group">
+                    <li class="list-group-item">{{ receta.harIng }} {{ receta.cantHar }}</li>
+                    <li class="list-group-item">{{ receta.manIng }} {{ receta.cantMan }}</li>
+                    <li class="list-group-item">{{ receta.azurIng }} {{ receta.cantAzur }}</li>
+                    <li class="list-group-item">{{ receta.huvrIng }} {{ receta.cantHuv }}</li>
+                    <li class="list-group-item">{{ receta.vainIng }} {{ receta.cantVain }}</li>
+                    <li class="list-group-item">{{ receta.horIng }} {{ receta.cantHor }}</li>
+                    <li class="list-group-item">{{ receta.salIng }} {{ receta.cantSal }}</li>
+                    <li class="list-group-item">{{ receta.LechIng }} {{ receta.cantLech }}</li>
+                    {% if receta.adicional %}
+                    <li class="list-group-item">{{ receta.adicional }} - {{ receta.cantAdicional }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- Sección de Procedimiento -->
+            <div class="procedimiento">
+                <h2>Procedimiento</h2>
+                <div class="procedimiento-texto">{{ receta.procedimiento }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

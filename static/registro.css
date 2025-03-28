@@ -1,0 +1,280 @@
+body {
+    background: url('../static/img/fondo.png') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card-custom {
+    max-width: 2000px; /* Aumentamos el ancho */
+    height: 680px; /* Aumentamos la altura */
+    background-color: #f3eadb;
+    border-radius: 10px;
+    padding: 30px;
+    position: relative;
+}
+
+.card-header-custom {
+    font-size: 24px; /* Tamaño del texto más grande */
+    font-weight: bold;
+    text-align: center;
+    color: #9c7325;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 100px; /* Más grande */
+    height: 60px;
+    cursor: pointer;
+}
+
+
+.form-container {
+    max-height: 575px; /* Más espacio interno */
+    overflow-y: auto;
+    padding-right: 10px;
+    scrollbar-width: thin; /* Estilo para Firefox */
+    scrollbar-color: #9c6b5c #f3eadb; /* Color del thumb y track para Firefox */
+}
+
+.form-container::-webkit-scrollbar {
+    width: 10px; /* Ajusta el grosor de la barra de desplazamiento */
+}
+
+.form-container::-webkit-scrollbar-thumb {
+    background-color: #9c6b5c; /* Color del "pulgar" del scroll */
+    border-radius: 10px;
+}
+
+.form-container::-webkit-scrollbar-track {
+    background-color: #f3eadb; /* Color del área detrás del "pulgar" */
+}
+
+
+.btn-custom {
+    background-color: #ffc107;
+    border: none;
+    color: black;
+    font-weight: bold;
+    width: 120px; /* Botones más anchos */
+}
+
+.btn-custom:hover {
+    background-color: #e0a800;
+}
+
+.table-container {
+    max-width: 800px;
+    width: 100%;
+    background-color: rgba(229, 201, 178, 0.8); /* Color con 80% de opacidad */
+    border-radius: 10px;
+    padding: 60px;
+    position: relative; /* Asegura que el botón "Agregar" se posicione correctamente */
+    margin-top: 20px; /* Espacio entre el formulario y la tabla */
+}
+
+.table-header {
+    background-color: #9c6b5c;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.table {
+    width: 100%;
+    background-color: transparent;
+    margin-top: 10px;
+}
+
+.table td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.btn-warning {
+    font-weight: bold;
+}
+
+.add-icon {
+    position: absolute;
+    top: -10px; /* Ajusta la posición vertical */
+    right: -10px; /* Ajusta la posición horizontal */
+    width: 90px;
+    cursor: pointer;
+}
+
+.container {
+    display: flex;
+    flex-direction: column; /* Alinea en columna */
+    align-items: center;
+    gap: 20px; /* Espacio entre el formulario y la tabla */
+}
+
+/* Estilos para los inputs */
+input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #fff;
+    color: #333;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, select:focus {
+    border-color: #9c6b5c;
+    box-shadow: 0 0 8px rgba(156, 107, 92, 0.6);
+    outline: none;
+}
+
+/* Estilos para los selects */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%239c6b5c" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+}
+
+/* Estilos para las etiquetas */
+label {
+    font-size: 16px;
+    color: #9c6b5c;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+
+
+
+/* Estilos para el fondo del modal */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro con transparencia */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px); /* Desenfoque para darle un efecto elegante */
+}
+
+/* Centrar el contenido del modal */
+.modal-content {
+    background: linear-gradient(135deg, #ff9966, #ff5e62);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    text-align: center;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    position: relative; /* Importante para el botón de cierre */
+    animation: fadeIn 0.3s ease-in-out;
+    margin: auto; /* Asegura que el modal esté centrado */
+}
+
+/* Texto del modal */
+.modal-content p {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Input de usuario */
+.modal-content input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    text-align: center;
+}
+
+/* Botón de verificación */
+.modal-content button {
+    margin-top: 15px;
+    background: #fff;
+    border: none;
+    padding: 12px 20px;
+    color: #ff5e62;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-content button:hover {
+    background: #f0f0f0;
+}
+
+/* Botón de cierre */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.close-btn:hover {
+    color: #ffcccc;
+}
+
+/* Animación de aparición */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Ajuste adicional para asegurar el centrado en viewport */
+@media (max-height: 600px) {
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+
+}
+
+
+
+  .custom-swal {
+    font-family: 'Arial', sans-serif;
+    border-radius: 15px;
+  }
+  
+  .swal2-title {
+    font-size: 1.5rem !important;
+  }

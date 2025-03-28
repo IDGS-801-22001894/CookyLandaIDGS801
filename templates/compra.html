@@ -1,0 +1,660 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% import "_macros.html" as macro %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/stilo.css') }}">
+<div class="container mt-5">
+    <h1 class="text-center header">COMPRA</h1>
+
+    <form id="compraForm" method="POST" action="">
+        {{ form.hidden_tag() }}  <!-- Token CSRF aquí -->
+
+        <input type="hidden" id="idCompra" name="idCompra" value="">
+        <div class="row">
+            <!-- Columna izquierda -->
+            <div class="col-md-4">
+                <div class="mb-5">
+                    <button type="button" onclick="agregarCampos()">
+                        <img src="{{ url_for('static', filename='img/agregar.png') }}" alt="Agregar" style="width: 30px; height: 33px;">
+                    </button>
+                    <button type="button" onclick="quitarCampo()"> -
+                        <img src="{{ url_for('static', filename='img/agregar.png') }}" alt="Quitar" style="width: 30px; height: 33px;">
+                    </button>
+                </div>
+                <div class="mb-5"> 
+                    {{ macro.input_field("text", "producto[]", "Producto", [
+                    "Seleccionar",
+                    "Harina de trigo", 
+                    "Mantequilla derretida", 
+                    "Azucar", 
+                    "Huevo", 
+
+                    "Esencia de vainilla", 
+                    "Polvo para hornear", 
+                    "Sal", 
+                    "Almendras picadas",
+
+                    "Mini bombones", 
+                    "Cafe instantaneo", 
+                    "Cajeta", 
+                    "Cerezas en almibar picadas", 
+
+                    "Esencia de chicle", 
+                    "Chispas de colores", 
+                    "Chispas de chocolate", 
+                    "Chispas de chocolate blanco", 
+                    
+                    "Mermelada de fresa",
+                    "Crema batida",
+                    "Gomitas delfin", 
+                    "Dulce leche",
+                    "Durazno en almibar",
+                    "Colorante morado",
+ 
+                    "Mermelada de frambuesa", 
+                    "Fresas", 
+                    "Frambuesas", 
+                    "Jugo de limon"
+                ]) }}
+                </div>
+            </div>
+            
+            <!-- Columna central -->
+            <div class="col-md-4">
+                <div class="mb-5"> {{ macro.input_field("number", "total", "Total") }} </div>
+                <div class="mb-5"> {{ macro.input_field("text", "cantidad[]", "Cantidad (Kg/L) ") }} </div>
+            </div>
+
+            <!-- Columna derecha -->
+            <div class="col-md-4">
+                <div class="mb-5">
+                    <label for="proveedor"></label>
+                    <select name="proveedor" id="proveedor" class="form-control">
+                        {% for proveedor in proveedores %}
+                            <option value="{{ proveedor.split(' - ')[0] }}">{{ proveedor }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                            <div class="mb-5"> {{ macro.input_field("text", "presentacion[]", "Presentación", ["Seleccionar","KG","Saco","Bolsa", "Costal", "Litro", "Galòn","Caja"]) }} </div>
+            </div>
+        </div>
+
+        <!-- Contenedor para campos dinámicos -->
+        <div id="campos-dinamicos"></div>
+
+        <!-- Botones -->
+        <div class="text-center mt-3">
+            <button type="button" class="buttonAG" onclick="confirmarAccion('submit_agregar')">Agregar</button>
+            <button type="button" class="buttonMo" onclick="confirmarAccion('submit_modificar')">Modificar</button>
+        </div>
+
+        <input type="hidden" id="actionType" name="actionType">
+        <input type="hidden" id="codigoUsuario" name="codigoUsuario">
+    </form>
+
+    <!-- Tabla de compras -->
+<div class="mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Fecha Compra</th>
+                <th>Proveedor</th>
+                <th>Total</th>
+                <th>Detalle Compra</th>
+                <th>Acciones</th> <!-- Nueva columna para el botón -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for compra in compras %}
+            <tr>
+                <td>{{ compra.fechaCompra }}</td>
+                <td>{{ compra.proveedor }}</td>
+                <td>{{ compra.total }}</td>
+                <td>
+                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#detalleModal" 
+                            onclick="mostrarDetalles({{ loop.index }})">
+                        Ver Detalles
+                    </button>
+                    <ul id="detalles-{{ loop.index }}" style="display: none;">
+                        {% for detalle in compra.detalles %}
+                        <li>{{ detalle.nombreProducto }} - {{ detalle.cantidad }} ({{ detalle.presentacion }})</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                   <!-- Botón para seleccionar el registro -->
+                   <button type="button" class="btn btn-primary btn-sm" 
+                   onclick="seleccionarCompra(this)"
+                   data-proveedor="{{ compra.proveedor }}"
+                   data-total="{{ compra.total }}"
+                   data-detalles='{{ compra.detalles | tojson | safe }}'
+                   data-id-compra="{{ compra.idCompra }}">
+               Editar
+           </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal para mostrar los detalles -->
+<div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detalleModalLabel">Detalles de la Compra</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul id="detallesModalBody"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para manejar el modal -->
+<script>
+    function mostrarDetalles(index) {
+        // Obtener la lista de detalles oculta
+        const detalles = document.getElementById(`detalles-${index}`).innerHTML;
+
+        // Insertar los detalles en el modal
+        document.getElementById('detallesModalBody').innerHTML = detalles;
+    }
+</script>
+
+<!-- Modal para mostrar los detalles -->
+<div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detalleModalLabel">Detalles de la Compra</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul id="detallesModalBody"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para manejar el modal -->
+<script>
+    function mostrarDetalles(index) {
+        // Obtener la lista de detalles oculta
+        const detalles = document.getElementById(`detalles-${index}`).innerHTML;
+
+        // Insertar los detalles en el modal
+        document.getElementById('detallesModalBody').innerHTML = detalles;
+    }
+</script>
+</div>
+
+<script>
+    const cantidadPorPresentacion = {
+        "Caja": 12,   // Litros
+        "Saco": 25,   // Kilogramos
+        "Costal": 100, // Kilogramos
+        "Bolsa": 10,   // Kilogramos
+        "Litro":1,
+        "Galón":10,
+        "Caja":12,
+        "KG":1,
+        "CajaH":45
+
+    };
+
+    function actualizarCantidad() {
+        const presentaciones = document.querySelectorAll('select[name="presentacion[]"]');
+        const cantidades = document.querySelectorAll('input[name="cantidad[]"]');
+
+        presentaciones.forEach((select, index) => {
+            select.addEventListener('change', function () {
+                const seleccion = select.value;
+                const cantidadInput = cantidades[index];
+
+                // Asignar la cantidad según la presentación
+                if (cantidadPorPresentacion[seleccion]) {
+                    cantidadInput.value = cantidadPorPresentacion[seleccion];
+                } else {
+                    cantidadInput.value = '';  // Dejar vacío si no hay valor asignado
+                }
+            });
+        });
+    }
+
+    // Llamar la función al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        actualizarCantidad();
+    });
+</script>
+
+
+<script>
+    function agregarCampos() {
+        const nuevoCampo = document.createElement('div');
+        nuevoCampo.className = 'row mt-3';
+
+        nuevoCampo.innerHTML = `
+            <div class="col-md-4">
+                <div class="mb-5">
+                    <label for="producto">Producto</label>
+                    <select name="producto[]" class="form-control">
+                        <option value="Seleccionar">Seleccionar</option>
+                        <option value="Harina de trigo">Harina de trigo</option>
+                        <option value="Mantequilla derretida">Mantequilla derretida</option>
+                        <option value="Azucar">Azúcar</option>
+                        <option value="Huevo">Huevo</option>
+
+                        <option value="Esencia de vainilla">Esencia de vainilla</option>
+                        <option value="Polvo para hornear">Polvo para hornear</option>
+                        <option value="Sal">Sal</option>
+                        <option value="Almendras picadas">Almendras picadas</option>
+
+                        <option value="Mini bombones">Mini bombones</option>
+                        <option value="Cafe instantaneo">Cafè instantáneo</option>
+                        <option value="Cajeta">Cajeta</option>
+                        <option value="Cerezas en almibar picadas">Cerezas en almíbar picadas</option>
+
+                        <option value="Esencia de chicle">Esencia de chicle</option>
+                        <option value="Chispas de colores">Chispas de colores</option>
+                        <option value="Chispas de chocolate">Chispas de chocolate</option>
+                        <option value="Chispas de chocolate blanco">Chispas de chocolate blanco</option>
+
+                        <option value="Mermelada de fresa">Mermelada de fresa</option>
+                        <option value="Crema batida">Crema batida</option>
+                        <option value="Gomitas delfin">Gomitas delfin</option>
+                        <option value="Dulce leche">Dulce de leche   </option>
+                        <option value="Durazno en almibar">Durazno en almibar</option>
+                        <option value="Colorante morado">Colorante morado   </option>
+
+                        <option value="Mermelada de frambuesa">Mermelada de frambuesa</option>
+                        <option value="Fresas">Fresas</option>
+                        <option value="Frambuesas">Frambuesas</option>
+                        <option value="Jugo de limon">Jugo de limón</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="mb-5">
+                    <label for="cantidad">Cantidad (Kg/L)</label>
+                    <input type="text" name="cantidad[]" class="form-control">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="mb-5">
+                    <label for="presentacion">Presentación</label>
+                    <select name="presentacion[]" class="form-control">
+                        <option value="Seleccionar">Seleccionar</option>
+                        <option value="KG">KG</option>
+                        <option value="Bolsa">Bolsa</option>
+                        <option value="Saco">Saco</option>
+                        <option value="Costal">Costal</option>
+                        <option value="Litro">Litro</option>
+                        <option value="Galón">Galón</option>
+                        <option value="Caja">Caja</option>
+
+
+                    </select>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('campos-dinamicos').appendChild(nuevoCampo);
+        actualizarCantidad();  // Llamar a la función para actualizar la cantidad en el nuevo campo
+
+    }
+</script>
+
+<!-- Script para SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmarAccion(action) {
+        Swal.fire({
+            title: "Ingrese el código de usuario",
+            input: "text",
+            inputPlaceholder: "Código de usuario",
+            showCancelButton: true,
+            confirmButtonText: "Confirmar",
+            cancelButtonText: "Cancelar",
+            inputValidator: (value) => {
+                if (!value) {
+                    return "Debe ingresar el código de usuario";
+                }
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("codigoUsuario").value = result.value;
+                document.getElementById("actionType").value = action;
+                
+                let inputAccion = document.createElement("input");
+                inputAccion.type = "hidden";
+                inputAccion.name = action;
+                inputAccion.value = "1";
+                document.getElementById("compraForm").appendChild(inputAccion);
+
+                document.getElementById("compraForm").submit();
+            }
+        });
+    }
+</script>
+
+<script>
+const presentacionesPorProducto = {
+    // Productos que tienen presentaciones limitadas (litro, galón, caja)
+    "Mantequilla derretida": {
+        presentaciones: ["Litro", "Galón", "Caja"],
+        cantidades: { "Litro": 1, "Galón": 10, "Caja": 12 }
+    },
+    "Esencia de vainilla": {
+        presentaciones: ["Litro", "Galón", "Caja"],
+        cantidades: { "Litro": 1, "Galón": 10, "Caja": 12 }
+    },
+    "Mermelada de fresa": {
+        presentaciones: ["Litro", "Galón", "Caja"],
+        cantidades: { "Litro": 1, "Galón": 10, "Caja": 12 }
+    },
+    "Esencia de chicle": {
+        presentaciones: ["Litro", "Galón", "Caja"],
+        cantidades: { "Litro": 1, "Galón": 10, "Caja": 12 }
+    },
+    "Mermelada de frambuesa": {
+        presentaciones: ["Litro", "Galón", "Caja"],
+        cantidades: { "Litro": 1, "Galón": 10, "Caja": 12 }
+    },
+    "Jugo de limon": {
+        presentaciones: ["Litro", "Galón", "Caja"],
+        cantidades: { "Litro": 1, "Galón": 10, "Caja": 12 }
+    },
+    // Productos con presentaciones en kg, bolsa, saco, costal
+    "Harina de trigo": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Azucar": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Polvo para hornear": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Sal": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Almendras picadas": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Mini bombones": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Cafe instantaneo": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Cajeta": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Cerezas en almibar picadas": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Chispas de colores": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Chispas de chocolate": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Chispas de chocolate blanco": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Fresas": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Frambuesas": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Crema batida": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },"Gomitas delfin": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },"Dulce leche": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },"Durazno en almibar": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },"Colorante morado": {
+        presentaciones: ["KG", "Bolsa", "Saco", "Costal"],
+        cantidades: { "KG": 1, "Bolsa": 10, "Saco": 25, "Costal": 100 }
+    },
+    "Huevo": {
+        presentaciones: ["CajaH","Bolsa"],
+        cantidades: { "CajaH": 45, "Bolsa":10 }
+    }
+};
+
+
+function actualizarPresentaciones() {
+    // Usar delegación de eventos para que también reconozca los campos dinámicos
+    document.addEventListener('change', function(event) {
+        // Verificar si el cambio fue en un campo de producto
+        if (event.target.name === 'producto[]') {
+            const productoSelect = event.target;
+            const selectPresentacion = productoSelect.closest('.row').querySelector('select[name="presentacion[]"]');
+
+            const productoSeleccionado = productoSelect.value;
+
+            // Limpiar las opciones anteriores
+            selectPresentacion.innerHTML = '';
+
+            if (presentacionesPorProducto[productoSeleccionado]) {
+                const presentaciones = presentacionesPorProducto[productoSeleccionado].presentaciones;
+                presentaciones.forEach(function(presentacion) {
+                    const option = document.createElement('option');
+                    option.value = presentacion;
+                    option.textContent = presentacion;
+                    selectPresentacion.appendChild(option);
+                });
+
+                // Establecer la cantidad correspondiente cuando se seleccione la presentación
+                selectPresentacion.addEventListener('change', function () {
+                    const cantidadInput = selectPresentacion.closest('.row').querySelector('input[name="cantidad[]"]');
+                    const cantidad = presentacionesPorProducto[productoSeleccionado].cantidades[selectPresentacion.value];
+                    cantidadInput.value = cantidad;
+                });
+            }
+        }
+    });
+}
+
+// Llamar a la función al cargar la página para los campos ya existentes
+document.addEventListener('DOMContentLoaded', function() {
+    actualizarPresentaciones();
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    actualizarPresentaciones();
+});
+</script>
+
+<script>
+    const preciosPorProducto = {
+        "Harina de trigo": 100,
+        "Mantequilla derretida": 150,
+        "Azucar": 70,
+        "Huevo": 300 / 45, // Precio por unidad
+        "Esencia de vainilla": 180,
+        "Polvo para hornear": 160,
+        "Sal": 7,
+        "Almendras picadas": 90,
+        "Mini bombones": 50,
+        "Cafe instantaneo": 70,
+        "Cajeta": 80,
+        "Cerezas en almibar picadas": 250,
+        "Esencia de chicle": 70,
+        "Chispas de colores": 25,
+        "Chispas de chocolate": 25,
+        "Chispas de chocolate blanco": 25,
+        "Mermelada de fresa": 40,
+        "Crema batida": 60,
+        "Gomitas delfin": 80,
+        "Dulce leche": 50,
+        "Durazno en almibar": 40,
+        "Colorante morado": 8,
+        "Mermelada de frambuesa": 60,
+        "Fresas": 35,
+        "Frambuesas": 40,
+        "Jugo de limon": 100
+    };
+
+    function calcularTotalCampo(campo) {
+        const productoSelect = campo.querySelector('select[name="producto[]"]');
+        const cantidadInput = campo.querySelector('input[name="cantidad[]"]');
+    
+        const producto = productoSelect ? productoSelect.value : null;
+        const cantidad = cantidadInput ? parseFloat(cantidadInput.value) : 0;
+    
+        if (producto && !isNaN(cantidad)) {
+            const precioUnitario = preciosPorProducto[producto];
+            const total = cantidad * precioUnitario; // Solo multiplicamos cantidad por precio unitario
+            return total;
+        }
+        return 0;
+    }
+    
+    // Función para recalcular el total global
+    function recalcularTotalGlobal() {
+        const campos = document.querySelectorAll('.row'); // Selecciona todos los campos (originales y dinámicos)
+        let totalGlobal = 0;
+    
+        campos.forEach(campo => {
+            totalGlobal += calcularTotalCampo(campo);
+        });
+    
+        // Actualizar el campo de total global
+        const totalInput = document.querySelector('input[name="total"]');
+        totalInput.value = totalGlobal.toFixed(2);
+    }
+    
+    // Delegación de eventos para manejar cambios en los campos dinámicos
+    document.addEventListener('change', function(event) {
+        if (event.target.name === 'presentacion[]' || event.target.name === 'producto[]' || event.target.name === 'cantidad[]') {
+            recalcularTotalGlobal();
+        }
+    });
+
+</script>
+<script>
+    function seleccionarCompra(boton) {
+        // Obtener los datos del botón
+        const proveedor = boton.getAttribute("data-proveedor");
+        const total = boton.getAttribute("data-total");
+        const detalles = JSON.parse(boton.getAttribute("data-detalles"));
+        const idCompra = boton.getAttribute("data-id-compra");
+
+        // Llenar el campo de Proveedor
+        document.querySelector('select[name="proveedor"]').value = proveedor;
+
+        // Llenar el campo de Total
+        document.querySelector('input[name="total"]').value = total;
+
+        // Llenar el campo oculto con el ID de la compra
+        document.querySelector('input[name="idCompra"]').value = idCompra;
+
+        // Limpiar campos dinámicos existentes
+        const camposDinamicos = document.getElementById("campos-dinamicos");
+        camposDinamicos.innerHTML = '';
+
+        // Verificar cuántos detalles hay
+        if (detalles.length === 1) {
+            // Si hay un solo detalle, llenar los campos originales
+            const detalle = detalles[0];
+            document.querySelector('select[name="producto[]"]').value = detalle.nombreProducto;
+            document.querySelector('input[name="cantidad[]"]').value = detalle.cantidad;
+            document.querySelector('select[name="presentacion[]"]').value = detalle.presentacion;
+        } else if (detalles.length > 1) {
+            // Si hay más de un detalle, llenar el campo original con el primer detalle
+            const primerDetalle = detalles[0];
+            document.querySelector('select[name="producto[]"]').value = primerDetalle.nombreProducto;
+            document.querySelector('input[name="cantidad[]"]').value = primerDetalle.cantidad;
+            document.querySelector('select[name="presentacion[]"]').value = primerDetalle.presentacion;
+
+            // Abrir campos dinámicos para los demás detalles
+            for (let i = 1; i < detalles.length; i++) {
+                agregarCampos(); // Agrega un nuevo campo dinámico
+                const campo = document.querySelector(`#campos-dinamicos .row:last-child`);
+
+                // Llenar los campos del producto
+                campo.querySelector('select[name="producto[]"]').value = detalles[i].nombreProducto;
+                campo.querySelector('input[name="cantidad[]"]').value = detalles[i].cantidad;
+                campo.querySelector('select[name="presentacion[]"]').value = detalles[i].presentacion;
+            }
+        }
+    }
+</script>
+<script>
+    function quitarCampo() {
+        const camposDinamicos = document.getElementById("campos-dinamicos");
+        const campos = camposDinamicos.querySelectorAll('.row');
+
+        // Verificar si hay campos para quitar
+        if (campos.length > 0) {
+            // Eliminar el último campo
+            camposDinamicos.removeChild(campos[campos.length - 1]);
+
+            // Recalcular el total
+            recalcularTotalGlobal();
+        } else {
+            alert("No hay campos para quitar.");
+        }
+    }
+</script>
+
+<script>
+    function validarFormulario() {
+        let producto = document.getElementsByName('producto[]');
+        let cantidad = document.getElementsByName('cantidad[]');
+        let presentacion = document.getElementsByName('presentacion[]');
+        let proveedor = document.getElementsByName('proveedor')[0];
+        let total = document.getElementsByName('total')[0];
+    
+        if (proveedor.value === "" || total.value === "") {
+            alert("Por favor, complete todos los campos.");
+            return false;
+        }
+    
+        for (let i = 0; i < producto.length; i++) {
+            if (producto[i].value === "" || cantidad[i].value === "" || presentacion[i].value === "") {
+                alert("Por favor, complete todos los campos.");
+                return false;
+            }
+        }
+    
+        return true;
+    }
+    
+    </script>
+{% endblock %}
